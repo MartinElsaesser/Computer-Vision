@@ -27,3 +27,13 @@ enable_pyflakes = false      # Syntax checking with pyflakes
 
 [tool.marimo.language_servers.ty]   # https://docs.marimo.io/guides/editor_features/language_server/#ty
 enabled = true
+
+
+# ruff config: https://docs.astral.sh/ruff/configuration/
+[tool.ruff]
+line-length = 88
+indent-width = 4
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "tab"
