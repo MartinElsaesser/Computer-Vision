@@ -15,5 +15,15 @@
 		"vscode-extension",
 		".git",
 		".vscode/**",
-	]
+	],
+	"files.exclude": {
+		"**/.git": true,
+		"**/.svn": true,
+		"**/.hg": true,
+		"**/.DS_Store": true,
+		"**/Thumbs.db": true,
+		"**/__marimo__": true,
+		"**/.ruff_cache": true,
+		"**/.venv": true,
+	}
 }
