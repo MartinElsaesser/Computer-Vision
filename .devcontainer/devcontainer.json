@@ -1,0 +1,29 @@
+{
+    "build": {
+        "dockerfile": "./Dockerfile",
+        "context": "."
+    },
+    "runArgs": [
+        "--security-opt=label=disable"
+    ],
+    "customizations": {
+        // Configure properties specific to VS Code.
+        "vscode": {
+            // Add the IDs of extensions you want installed when the container is created.
+            "extensions": [
+                // git tooling
+                "mhutchie.git-graph",
+                // spell checking
+                "streetsidesoftware.code-spell-checker",
+                "streetsidesoftware.code-spell-checker-german",
+                // Python
+                "ms-python.python",
+                "ms-python.debugpy",
+                "tamasfe.even-better-toml",
+                "ms-toolsai.datawrangler",
+                "charliermarsh.ruff"
+            ]
+        }
+    },
+    "remoteUser": "vscode"
+}
