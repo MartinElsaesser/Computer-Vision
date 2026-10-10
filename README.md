@@ -27,14 +27,20 @@ Use:
 uv run somePythonFile.py
 ```
 
-## Pyrefly for type checking
 
-https://pyrefly.org/
+## ty for type checking
 
-### Run pyrefly
+https://docs.astral.sh/ty/
+
+### Run ty
 ```bash 
-uv run pyrefly check
+uv run ty check
 ```
+
+## ruff for formatting
+
+https://docs.astral.sh/ruff/
+
 
 ### Documentation on typing
 - [quick start into typing python code from pyrefly](https://pyrefly.org/en/docs/typing-for-python-developers/)

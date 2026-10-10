@@ -37,3 +37,9 @@ indent-width = 4
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "tab"
+
+[tool.ruff.lint.per-file-ignores]
+"notebooks/*.py" = [ # make ruff work smoother with marimo notebooks
+	"B018",		# prevents issues if a variable is defined in one and used in a subsequent cell
+	"PLR171"	# return statements are used in marimo notebooks to express prints
+]

@@ -17,9 +17,8 @@ def build_string(string_arr: list[str], joiner: str) -> str:
 
 
 @app.cell
-def build_string():
+def _():
     string = build_string(["abc", "def"], "-")
-    string
     return (string,)
 
 

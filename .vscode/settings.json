@@ -1,5 +1,19 @@
 {
 	"editor.tabSize": 4,
 	"editor.useTabStops": true,
-	"editor.insertSpaces": false
+	"editor.insertSpaces": false,
+	"cSpell.words": [
+		"marimo",
+		"pyrefly"
+	],
+	"cSpell.ignorePaths": [
+		"package-lock.json",
+		"node_modules",
+		".venv",
+		"uv.lock",
+		"uv.lock",
+		"vscode-extension",
+		".git",
+		".vscode/**",
+	]
 }
