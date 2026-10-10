@@ -21,7 +21,9 @@
                 "ms-python.debugpy",
                 "tamasfe.even-better-toml",
                 "ms-toolsai.datawrangler",
-                "charliermarsh.ruff"
+                "charliermarsh.ruff",
+                "marimo-team.vscode-marimo", // Marimo
+                "meta.pyrefly" // Pyrefly
             ]
         }
     },
