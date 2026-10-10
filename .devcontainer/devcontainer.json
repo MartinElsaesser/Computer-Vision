@@ -6,7 +6,7 @@
 	"runArgs": [
 		"--security-opt=label=disable"
 	],
-	"postCreateCommand": "fnm use --install-if-missing",
+	"postCreateCommand": "fnm use --install-if-missing; uv sync",
 	"customizations": {
 		// Configure properties specific to VS Code.
 		"vscode": {
