@@ -22,8 +22,8 @@
                 "tamasfe.even-better-toml",
                 "ms-toolsai.datawrangler",
                 "charliermarsh.ruff",
-                "marimo-team.vscode-marimo", // Marimo
-                "meta.pyrefly" // Pyrefly
+                "astral-sh.ty",
+                "marimo-team.vscode-marimo" // Marimo
             ]
         }
     },
