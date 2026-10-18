@@ -17,6 +17,8 @@
 				// spell checking
 				"streetsidesoftware.code-spell-checker",
 				"streetsidesoftware.code-spell-checker-german",
+				// PDF
+				"tomoki1207.pdf",
 				// Python
 				"ms-python.python",
 				"ms-python.debugpy",
