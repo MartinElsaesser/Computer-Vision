@@ -25,7 +25,8 @@
 				"tamasfe.even-better-toml",
 				"charliermarsh.ruff",
 				"astral-sh.ty",
-				"marimo-team.vscode-marimo" // Marimo
+				"marimo-team.vscode-marimo", // Marimo
+				"myriad-dreamin.tinymist"
 			]
 		}
 	},
