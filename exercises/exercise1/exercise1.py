@@ -93,7 +93,7 @@ def _(cv2, hog, list_of_image_files, os, path2ImgFiles, plt):
         img_bgr = cv2.imread(os.path.join(path2ImgFiles, fname))
         gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
         _rects, _weights = hog.detectMultiScale(
-            gray, winStride=(4, 4), padding=(8, 8), scale=1.2 
+            gray, winStride=(4, 4), padding=(8, 8), scale=1.2
         )
         out = img_bgr.copy()
         for _x, _y, _w, _h in _rects:
