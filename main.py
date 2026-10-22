@@ -1,6 +1,6 @@
 def main() -> None:
-	print("Hello from pythonboilerplate!")
+    print("Hello from pythonboilerplate!")
 
 
 if __name__ == "__main__":
-	main()
+    main()
