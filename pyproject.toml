@@ -8,6 +8,8 @@ dependencies = [
     "marimo>=0.25.1",
     "matplotlib>=3.11.2",
     "opencv-contrib-python>=5.0.0.93",
+    "torch>=2.15.0",
+    "torchvision>=0.29.2",
 ]
 
 [dependency-groups]
@@ -17,6 +19,8 @@ dev = [
     "ty>=0.0.86",
 ]
 
+[[tool.uv.index]]
+url = "https://download.pytorch.org/whl/cpu"
 
 [tool.marimo.language_servers.pylsp]    # https://docs.marimo.io/guides/editor_features/language_server/#pylsp-python-lsp-server
 enabled = true               # Enable/disable pylsp
