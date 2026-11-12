@@ -45,7 +45,7 @@ def _(np):
             [1, 2, 1],
         ], dtype=np.float32
     )
-    return Gx, Gy
+    return
 
 
 @app.cell
@@ -61,7 +61,7 @@ def _():
     img = Image.open(img_path)
     img = ImageOps.grayscale(img)
     img
-    return cv2, img
+    return (img,)
 
 
 @app.cell
@@ -119,55 +119,102 @@ def _(img_blured_scaled: "torch.Tensor", plt):
 
 
 @app.cell
-def _(Gx, Gy, cv2, direction_selector, img, np):
-    scale_factor = 1
-    img2Show: np.typing.NDArray = np.array([])
-    if "horizontal" in direction_selector.value:
-        G_x = cv2.filter2D(img, cv2.CV_32F, Gx)
-        img2Show = G_x
-        scale_factor = np.sum(np.abs(Gx))
+def _(torch):
 
-    if "vertical" in direction_selector.value:
-        G_y = cv2.filter2D(img, cv2.CV_32F, Gy)
-        img2Show = G_y
-        scale_factor = np.sum(np.abs(Gy))
+    GxWeights = torch.tensor([
+        [-0.25, 0, 0.25],
+        [-0.5, 0, 0.5],
+        [-0.25, 0, 0.25],
+    ])
+    GyWeights = torch.tensor([
+        [-0.25, -0.5, -0.25],
+        [0,0,0],
+        [0.25,0.5,0.25],
+    ])
 
-    if "horizontal" in direction_selector.value and "vertical" in direction_selector.value:
-        G_x = cv2.filter2D(img, cv2.CV_32F, Gx)
-        G_y = cv2.filter2D(img, cv2.CV_32F, Gy)
-        img2Show = np.sqrt(G_x**2 + G_y**2)
-        scale_factor = np.sum(np.abs(Gy)) # TODO: scale_factor
-
-    print(scale_factor)
-    return img2Show, scale_factor
+    weights = torch.stack([ GxWeights, GyWeights ], dim=0).unsqueeze(1)
+    weights
+    return (weights,)
 
 
 @app.cell
-def _():
-    offset = 0
-    return (offset,)
+def _(nn, weights):
+    conv2d_sobel = nn.Conv2d(in_channels=1, out_channels=2, kernel_size=3, stride=1, padding=1, dilation=1, bias=False, padding_mode="replicate",)
+
+
+    state_dict = conv2d_sobel.state_dict()
+    state_dict["weight"] = weights
+    conv2d_sobel.load_state_dict(state_dict)
+    return (conv2d_sobel,)
 
 
 @app.cell
-def _(img2Show: "np.typing.NDArray", offset, scale_factor):
-    img2ShowScaled =  ( img2Show / scale_factor ) + offset
-    img2ShowScaled
+def _(img_blured_scaled: "torch.Tensor"):
+    img_blured_scaled.shape
     return
 
 
 @app.cell
-def _(img, img2Show: "np.typing.NDArray", plt):
-    figure = plt.figure(figsize=(10,8))
-    cols, rows = 2, 1
-    figure.add_subplot(rows, cols, 1)
-    plt.title("Originalbild")
-    plt.axis("off")
-    plt.imshow(img, cmap="gray")
+def _(conv2d_sobel, img_blured_scaled: "torch.Tensor"):
+    img_filtered = conv2d_sobel(img_blured_scaled)
+    img_filtered_X = img_filtered[0]
+    img_filtered_y = img_filtered[1]
+    img_filtered_y
+    return img_filtered_X, img_filtered_y
 
-    figure.add_subplot(rows, cols, 2)
-    plt.title("Kantenbild")
-    plt.axis("off")
-    plt.imshow(img2Show, cmap="gray")
+
+@app.cell
+def _(img_filtered_X, img_filtered_y, plt):
+    plt.imshow(img_filtered_X.squeeze().detach().numpy(), cmap="gray")
+    plt.show()
+
+    plt.imshow(img_filtered_y.squeeze().detach().numpy(), cmap="gray")
+    plt.show()
+    return
+
+
+@app.cell
+def _(img_filtered_X, img_filtered_y, plt, torch):
+    magnitude = torch.sqrt(img_filtered_X**2 + img_filtered_y**2)
+    magnitude.shape
+
+    plt.imshow(magnitude.detach().numpy(), cmap="gray")
+    return (magnitude,)
+
+
+@app.cell
+def _(img_filtered_X, img_filtered_y, torch):
+    angle_in_radians = torch.atan2(img_filtered_y, img_filtered_X)
+    return (angle_in_radians,)
+
+
+@app.cell
+def _(angle_in_radians, magnitude, np, plt):
+    # Move to numpy (detach in case they come from an autograd graph)
+    ang = angle_in_radians.detach().cpu().numpy()
+    mag = magnitude.detach().cpu().numpy()
+
+    # Normalize magnitude for arrow lengths (robust to outliers)
+    mag_norm = mag / (np.percentile(mag, 99) + 1e-8)
+    mag_norm = np.clip(mag_norm, 0, 1)
+
+    # Subsample for readability
+    step = max(1, min(mag.shape) // 40)
+    ys, xs = np.mgrid[0:mag.shape[0]:step, 0:mag.shape[1]:step]
+    u = np.cos(ang[::step, ::step]) * mag_norm[::step, ::step]
+    v = np.sin(ang[::step, ::step]) * mag_norm[::step, ::step]
+
+    # Plot
+    fig, ax = plt.subplots(figsize=(8, 8))
+    ax.imshow(mag, cmap="gray", alpha=0.6)
+    ax.quiver(xs, ys, u, v, color="red", pivot="mid",
+              angles="xy", scale_units="xy", scale=0.5)
+    ax.invert_yaxis()  # match image row-0-at-top convention
+    ax.set_title("Gradient direction field (subsampled)")
+    ax.set_xticks([]); ax.set_yticks([])
+
+    plt.tight_layout()
+    plt.show()
     return
 
 
